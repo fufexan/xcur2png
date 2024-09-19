@@ -16,7 +16,10 @@
 /* Todo: atoi error handling */
 /* help is -h in manual */
 
+#if HAVE_CONFIG_H
 #include <config.h>
+#endif
+#undef malloc
 
 #define _ATFILE_SOURCE
 #include <stdio.h>
@@ -33,6 +36,19 @@
 /* Need to use libpng > ver 1.0.6 */
 #include <png.h>
 #include <X11/Xcursor/Xcursor.h>
+
+
+void *malloc ();
+
+/* Allocate an N-byte block of memory from the heap.
+   If N is zero, allocate a 1-byte block.  */
+
+void* rpl_malloc (size_t n)
+{
+  if (n == 0)
+    n = 1;
+  return malloc (n);
+}
 
 #define PNG_SETJMP_NOT_SUPPORTED 1
 
